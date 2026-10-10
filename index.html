@@ -428,7 +428,7 @@ function fromHash() {
   return Number.isNaN(d.getTime()) ? atNoon(new Date()) : d;
 }
 
-let selected = fromHash();
+let selected = atNoon(new Date());
 let calMonth = new Date(selected.getFullYear(),selected.getMonth(),1);
 let editingDate = null;
 let editingLesson = null;
