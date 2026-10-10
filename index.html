@@ -481,11 +481,12 @@ async function loadSharedHomework(showError = false) {
 }
 
 /* Сохраняем задание в общую базу, используя уникальность даты, времени и предмета. */
-async function saveHw(d,l,value) {
+
+async function saveHw(d, l, value) {
   const description = value.trim();
 
   try {
-    const {error} = await db
+    const { data, error } = await db
       .from('homework')
       .upsert({
         lesson_date: iso(d),
@@ -494,19 +495,35 @@ async function saveHw(d,l,value) {
         description
       }, {
         onConflict: 'lesson_date,lesson_start,subject'
-      });
+      })
+      .select('lesson_date, lesson_start, subject, description')
+      .single();
 
     if (error) throw error;
 
-    homeworkCache.set(hwKey(d,l),description);
+    homeworkCache.set(hwKey(d, l), data.description || '');
+    console.log('Домашнее задание сохранено:', data);
     return true;
 
   } catch (error) {
-    console.error('Не удалось сохранить ДЗ в Supabase:',error);
-    alert('Не удалось сохранить задание в общую базу. Проверь интернет-соединение и настройки Supabase.');
+    console.error('Ошибка сохранения домашнего задания:', error);
+
+    const details = [
+      error.message,
+      error.code ? `Код: ${error.code}` : '',
+      error.details ? `Подробности: ${error.details}` : '',
+      error.hint ? `Подсказка: ${error.hint}` : ''
+    ].filter(Boolean).join('\n');
+
+    alert(
+      'Не удалось сохранить домашнее задание.\n\n' +
+      (details || 'Неизвестная ошибка. Проверь консоль браузера.')
+    );
+
     return false;
   }
 }
+
 
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, ch => ({
