@@ -43,7 +43,7 @@ button:focus-visible,textarea:focus-visible {outline:2px solid var(--accent);out
 .iconbtn:hover {transform:translateY(-2px);background:var(--soft)}
 .iconbtn svg,.calbtn svg {display:block}
 
-/* Навигация по дням */
+/* Навигация по неделям и дням */
 .week {display:flex;align-items:center;gap:clamp(3px,1vw,9px);padding:10px 13px;margin-bottom:22px;border:1px solid var(--line);border-radius:999px;background:var(--card);backdrop-filter:blur(20px);box-shadow:var(--shadow);animation:rise .4s both}
 .day {flex:1 1 0;min-width:0;padding:0;display:flex;align-items:center;flex-direction:column;gap:2px;border:0;border-radius:999px;background:transparent;color:var(--muted)}
 .day small {font-size:11px;font-weight:800;letter-spacing:.03em}
@@ -53,6 +53,8 @@ button:focus-visible,textarea:focus-visible {outline:2px solid var(--accent);out
 .day.active .num {background:var(--accent);border-color:var(--accent);color:white;box-shadow:0 6px 16px #7864ff35}
 .day.today:not(.active) .num {border-color:#18b45a;color:#18a957;background:#eaf8ef}
 .dark .day.today:not(.active) .num {background:#173627;color:#5fe19a}
+.weeknav {flex:0 0 29px;width:29px;height:42px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:transparent;color:var(--muted);font-size:25px;font-weight:400;line-height:1;transition:background .2s,color .2s}
+.weeknav:hover {background:var(--soft);color:var(--accent)}
 .calbtn {flex:0 0 44px;height:44px;display:grid;place-items:center;padding-left:8px;border:0;border-left:1px solid var(--line);background:transparent;color:var(--muted)}
 .calbtn:hover {color:var(--accent)}
 
@@ -91,6 +93,7 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
 .subject {margin-bottom:12px;font-size:21px;font-weight:800;line-height:1.3;letter-spacing:-.04em;overflow-wrap:anywhere}
 .meta {display:flex;flex-wrap:wrap;gap:7px 18px;color:var(--muted);font-size:13px}
 .meta span {display:flex;align-items:flex-start;gap:6px;min-width:0;overflow-wrap:anywhere}
+.door-icon {display:block;flex:0 0 15px;width:15px;height:15px;margin-top:1px;color:var(--muted)}
 .hw {margin-top:15px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
 .hw-label {display:inline-flex;align-items:center;gap:7px;margin-bottom:5px;color:#4388ff;font-size:12px;font-weight:800}
 .hw-empty {margin-top:12px;color:#9aa3b4;font-size:12px}
@@ -113,7 +116,7 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
 .hw-item-card {min-width:0;padding:14px 16px;border:1px solid var(--line);border-radius:18px;background:var(--card);transition:border-color .2s,transform .2s}
 .hw-item:hover .hw-item-card {border-color:var(--accent);transform:translateY(-1px)}
 .hw-item-subject {margin-bottom:7px;font-weight:800;overflow-wrap:anywhere}
-.hw-item-kind {margin-bottom:7px;color:var(--muted);font-size:11px}
+.hw-item-kind {display:flex;align-items:center;gap:5px;margin-bottom:7px;color:var(--muted);font-size:11px}
 .hw-item-text {font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
 .hw-item-empty {color:var(--muted);font-size:13px}
 .hw-item-empty::before {content:"＋ ";color:var(--accent);font-weight:800}
@@ -151,6 +154,7 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
 .modal-actions {display:flex;justify-content:flex-end;gap:8px;margin-top:15px}
 .modal-actions button {min-height:42px;padding:9px 15px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
 .modal-actions .primary {background:var(--accent);color:white;border-color:var(--accent)}
+.modal-actions .primary:disabled {opacity:.6;cursor:wait}
 
 @keyframes rise {from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeSlide {from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
@@ -162,6 +166,7 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
   .mark {width:36px;height:36px;flex-basis:36px;border-radius:12px}
   .iconbtn {width:40px;height:40px;flex-basis:40px}
   .week {gap:2px;padding:8px 5px;margin-bottom:20px}
+  .weeknav {flex-basis:23px;width:23px;height:36px;font-size:22px}
   .day {gap:4px}
   .day small {font-size:10px;letter-spacing:0}
   .num {width:clamp(24px,7.1vw,34px);height:clamp(24px,7.1vw,34px);font-size:12px}
@@ -198,6 +203,7 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
 @media(max-width:370px) {
   .app {padding-left:8px;padding-right:8px}
   .week {gap:1px;padding:7px 3px}
+  .weeknav {flex-basis:19px;width:19px;font-size:20px}
   .day small {font-size:9px}
   .num {width:23px;height:23px;font-size:11px}
   .calbtn {flex-basis:27px;padding-left:2px}
@@ -230,7 +236,6 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
     </div>
   </header>
 
-  <!-- Экран расписания -->
   <section id="scheduleView" class="view">
     <nav class="week" id="week" aria-label="Дни недели"></nav>
     <div class="head">
@@ -247,7 +252,6 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
     </footer>
   </section>
 
-  <!-- Отдельный экран ДЗ на ближайшие 7 дней -->
   <section id="homeworkView" class="view hidden">
     <div class="head">
       <div>
@@ -255,7 +259,7 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
         <div class="date" id="hwRange"></div>
       </div>
     </div>
-    <p class="hw-intro">Сначала задания, которые уже добавили. Ниже — семинары, для которых ДЗ ещё не записано. Нажми на семинар, чтобы добавить или изменить задание.</p>
+    <p class="hw-intro">Задания общие для всех посетителей сайта. Нажми на семинар, чтобы добавить или изменить задание.</p>
     <div class="hw-summary">
       <div><strong id="hwTotal">0</strong><br><span>заданий добавлено</span></div>
       <div style="text-align:right"><strong id="hwRemaining">0</strong><br><span>семинаров без ДЗ</span></div>
@@ -280,7 +284,7 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
 <div class="overlay" id="hwOverlay" role="dialog" aria-modal="true" aria-labelledby="hwTitle">
   <section class="hw-modal">
     <h2 id="hwTitle">Домашнее задание</h2>
-    <p id="hwSubtitle">Запись сохраняется в этом браузере.</p>
+    <p id="hwSubtitle">Задание будет общим для всех посетителей сайта.</p>
     <textarea id="hwText" placeholder="Напиши домашнее задание…" enterkeyhint="done"></textarea>
     <div class="modal-actions">
       <button id="hwCancel">Отмена</button>
@@ -306,8 +310,18 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
   </section>
 </div>
 
+<!-- Клиент Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 'use strict';
+
+const SUPABASE_URL = 'https://drjesoafjwceffeiaypb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_auP__IdERD2rFeR5tmHDcQ_lycIY8US';
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* Кэш нужен только для отображения. Источник данных — Supabase. */
+const homeworkCache = new Map();
+let homeworkLoading = false;
 
 const days = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
 const short = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
@@ -373,7 +387,6 @@ function fromHash() {
 
 let selected = fromHash();
 let calMonth = new Date(selected.getFullYear(),selected.getMonth(),1);
-let editingKey = '';
 let editingDate = null;
 let editingLesson = null;
 let lastFocus = null;
@@ -386,37 +399,72 @@ const slots = [
   ['16:45','18:20']
 ];
 
-function getLessons(d) {
-  const i = (d.getDay()+6)%7;
-  let arr = (schedule[i]||[]).map(x => ({...x}));
-
-  // На четверг и пятницу алгебра проводится через неделю.
-  if (i===3 || i===4) {
-    const base = monday(new Date(2026,9,12));
-    const cur = monday(d);
-    const week = Math.round((cur-base)/604800000);
-    if (week%2 !== 0) arr = arr.filter(x => x.subject !== 'Алгебра');
-  }
-  return arr;
-}
-
 function hwKey(d,l) {
-  return `s103hw:${iso(d)}:${l.start}:${l.subject}`;
+  return `${iso(d)}|${l.start}|${l.subject}`;
 }
-function readHw(key) {
-  try { return localStorage.getItem(key)||''; }
-  catch (e) { return ''; }
+function readHw(d,l) {
+  return homeworkCache.get(hwKey(d,l)) || '';
 }
-function saveHw(key,value) {
+
+/* Загружаем общие задания из базы. */
+async function loadSharedHomework(showError = false) {
+  if (homeworkLoading) return;
+  homeworkLoading = true;
+
   try {
-    if (value.trim()) localStorage.setItem(key,value.trim());
-    else localStorage.removeItem(key);
+    const {data,error} = await db
+      .from('homework')
+      .select('lesson_date, lesson_start, subject, description');
+
+    if (error) throw error;
+
+    homeworkCache.clear();
+
+    for (const row of data || []) {
+      const key = `${row.lesson_date}|${row.lesson_start}|${row.subject}`;
+      homeworkCache.set(key, row.description || '');
+    }
+
+    render();
+
+  } catch (error) {
+    console.error('Не удалось загрузить ДЗ из Supabase:',error);
+    if (showError) {
+      alert('Не удалось загрузить общие домашние задания. Проверь подключение Supabase и политики доступа к таблице homework.');
+    }
+  } finally {
+    homeworkLoading = false;
+  }
+}
+
+/* Сохраняем задание в общую базу, используя уникальность даты, времени и предмета. */
+async function saveHw(d,l,value) {
+  const description = value.trim();
+
+  try {
+    const {error} = await db
+      .from('homework')
+      .upsert({
+        lesson_date: iso(d),
+        lesson_start: l.start,
+        subject: l.subject,
+        description
+      }, {
+        onConflict: 'lesson_date,lesson_start,subject'
+      });
+
+    if (error) throw error;
+
+    homeworkCache.set(hwKey(d,l),description);
     return true;
-  } catch (e) {
-    alert('Не удалось сохранить задание. Проверь настройки хранения данных браузера.');
+
+  } catch (error) {
+    console.error('Не удалось сохранить ДЗ в Supabase:',error);
+    alert('Не удалось сохранить задание в общую базу. Проверь интернет-соединение и настройки Supabase.');
     return false;
   }
 }
+
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, ch => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
@@ -435,6 +483,14 @@ function formatDate(d) {
   return `${d.getDate()} ${months[d.getMonth()]}`;
 }
 
+function doorIcon() {
+  return `<svg class="door-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M5 21V4.8a1 1 0 0 1 .8-1l10-2A1 1 0 0 1 17 2.8V21"/>
+    <path d="M3 21h18M17 6l3 1v14"/>
+    <circle cx="13.5" cy="12" r=".7" fill="currentColor" stroke="none"/>
+  </svg>`;
+}
+
 /* Редактор разрешён только для семинаров. */
 function openHomework(d,l) {
   if (!l || l.type !== 'Семинар') return;
@@ -442,12 +498,11 @@ function openHomework(d,l) {
   lastFocus = document.activeElement;
   editingDate = atNoon(d);
   editingLesson = {...l};
-  editingKey = hwKey(editingDate,editingLesson);
 
   $('hwTitle').textContent = l.subject;
   $('hwSubtitle').textContent =
-    `${dayName(d)}, ${d.getDate()} ${months[d.getMonth()]} · ${l.start}–${l.end} · Семинар. Задание сохраняется в этом браузере.`;
-  $('hwText').value = readHw(editingKey);
+    `${dayName(d)}, ${d.getDate()} ${months[d.getMonth()]} · ${l.start}–${l.end} · Общая запись для всех посетителей сайта.`;
+  $('hwText').value = readHw(editingDate,editingLesson);
   $('hwOverlay').classList.add('open');
   $('hwText').focus();
 }
@@ -463,20 +518,33 @@ function renderWeek() {
   const today = atNoon(new Date());
   const mon = monday(d);
 
-  $('week').innerHTML = Array.from({length:7},(_,n) => {
-    const x = new Date(mon);
-    x.setDate(mon.getDate()+n);
-    return `<button class="day ${same(x,d)?'active':''} ${same(x,today)?'today':''}"
-      data-d="${iso(x)}" aria-label="${days[n]}, ${x.getDate()}">
-      <small>${short[n]}</small><span class="num">${x.getDate()}</span></button>`;
-  }).join('') + `<button class="calbtn" id="openCal" title="Открыть календарь" aria-label="Открыть календарь">
-    <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 10h18"/>
-    </svg></button>`;
+  const previous = new Date(d);
+  previous.setDate(previous.getDate()-7);
+
+  const following = new Date(d);
+  following.setDate(following.getDate()+7);
+
+  $('week').innerHTML =
+    `<button class="weeknav" id="prevWeek" title="Предыдущая неделя" aria-label="Предыдущая неделя">‹</button>` +
+    Array.from({length:7},(_,n) => {
+      const x = new Date(mon);
+      x.setDate(mon.getDate()+n);
+      return `<button class="day ${same(x,d)?'active':''} ${same(x,today)?'today':''}"
+        data-d="${iso(x)}" aria-label="${days[n]}, ${x.getDate()}">
+        <small>${short[n]}</small><span class="num">${x.getDate()}</span></button>`;
+    }).join('') +
+    `<button class="weeknav" id="nextWeek" title="Следующая неделя" aria-label="Следующая неделя">›</button>` +
+    `<button class="calbtn" id="openCal" title="Открыть календарь" aria-label="Открыть календарь">
+      <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 10h18"/>
+      </svg></button>`;
 
   $('week').querySelectorAll('[data-d]').forEach(b => {
     b.onclick = () => go(new Date(b.dataset.d+'T12:00:00'));
   });
+
+  $('prevWeek').onclick = () => go(previous);
+  $('nextWeek').onclick = () => go(following);
   $('openCal').onclick = openCal;
 }
 
@@ -513,7 +581,6 @@ function renderSchedule() {
   $('list').innerHTML = slots.map(([st,en],idx) => {
     const l = slotsWithLessons[idx];
 
-    // Окна показываются только между первой и последней парой.
     if (!l) {
       if (idx<first || idx>last) return '';
       return `<article class="lesson">
@@ -525,9 +592,7 @@ function renderSchedule() {
     const s = mins(l.start), e = mins(l.end);
     const status = same(d,today) ? (nm>=s && nm<e?'current':nm>=e?'past':'next') : '';
     const canHaveHomework = l.type === 'Семинар';
-
-    // Читаем и показываем ДЗ только у семинаров.
-    const homework = canHaveHomework ? readHw(hwKey(d,l)) : '';
+    const homework = canHaveHomework ? readHw(d,l) : '';
     const typeClass = l.type==='Лекция'?'type-lecture':l.type==='Практикум'?'type-practicum':'';
 
     return `<article class="lesson"
@@ -538,7 +603,10 @@ function renderSchedule() {
           ${status==='current'?'<span class="status">Идёт сейчас</span>':status==='next'?'<span class="status">Следующая</span>':''}
         </div>
         <div class="subject">${escapeHTML(l.subject)}</div>
-        <div class="meta"><span>♙ ${escapeHTML(l.teacher)}</span><span>🚪 ${escapeHTML(l.room)}</span></div>
+        <div class="meta">
+          <span>♙ ${escapeHTML(l.teacher)}</span>
+          <span>${doorIcon()} ${escapeHTML(l.room)}</span>
+        </div>
         ${homework
           ? `<div class="hw"><div class="hw-label">☷ ДЗ</div><div>${escapeHTML(homework).replace(/\n/g,'<br>')}</div></div>`
           : canHaveHomework
@@ -548,7 +616,6 @@ function renderSchedule() {
     </article>`;
   }).join('');
 
-  // Обработчики назначаются только карточкам семинаров.
   $('list').querySelectorAll('[data-hw-slot]').forEach(el => {
     const l = slotsWithLessons[Number(el.dataset.hwSlot)];
     el.onclick = () => openHomework(d,l);
@@ -561,8 +628,7 @@ function renderSchedule() {
   });
 }
 
-/* ДЗ на ближайшие семь календарных дней, начиная с сегодняшнего дня.
-   Вначале показываются заполненные задания, ниже — семинары без ДЗ. */
+/* ДЗ на ближайшие семь календарных дней. */
 function renderHomework() {
   const start = atNoon(new Date());
   const end = new Date(start);
@@ -581,7 +647,7 @@ function renderHomework() {
     const seminars = getLessons(d).filter(l => l.type === 'Семинар');
 
     seminars.forEach(l => {
-      const homework = readHw(hwKey(d,l)).trim();
+      const homework = readHw(d,l).trim();
       const item = {d,l,homework,offset};
 
       if (homework) assigned.push(item);
@@ -629,7 +695,7 @@ function renderHomework() {
         </div>
         <div class="hw-item-card">
           <div class="hw-item-subject">${escapeHTML(l.subject)}</div>
-          <div class="hw-item-kind">Семинар · 🚪 ${escapeHTML(l.room)}</div>
+          <div class="hw-item-kind">Семинар · ${doorIcon()} ${escapeHTML(l.room)}</div>
           ${showHomework
             ? `<div class="hw-item-text">${escapeHTML(homework).replace(/\n/g,'<br>')}</div>`
             : '<div class="hw-item-empty">Нажми, чтобы добавить ДЗ</div>'}
@@ -709,7 +775,8 @@ function showTab(tab) {
 document.querySelectorAll('.navitem').forEach(b => {
   b.onclick = () => showTab(b.dataset.tab);
 });
-$('hwRefresh').onclick = renderHomework;
+
+$('hwRefresh').onclick = () => loadSharedHomework(true);
 
 function openCal() {
   lastFocus = document.activeElement;
@@ -746,17 +813,29 @@ function drawCal() {
 }
 
 $('hwCancel').onclick = closeHomework;
-$('hwSave').onclick = () => {
+
+$('hwSave').onclick = async () => {
   if (!editingLesson || editingLesson.type !== 'Семинар') {
     closeHomework();
     return;
   }
 
-  if (saveHw(editingKey,$('hwText').value)) {
-    closeHomework();
-    render();
+  const button = $('hwSave');
+  button.disabled = true;
+  button.textContent = 'Сохраняю…';
+
+  try {
+    const success = await saveHw(editingDate,editingLesson,$('hwText').value);
+    if (success) {
+      closeHomework();
+      render();
+    }
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Сохранить';
   }
 };
+
 $('hwOverlay').onclick = e => {
   if (e.target===$('hwOverlay')) closeHomework();
 };
@@ -775,9 +854,24 @@ $('themeBtn').onclick = () => {
     localStorage.setItem('s103theme',document.documentElement.classList.contains('dark')?'dark':'light');
   } catch (e) {}
 };
+
 try {
   if (localStorage.getItem('s103theme')==='dark') document.documentElement.classList.add('dark');
 } catch (e) {}
+
+function getLessons(d) {
+  const i = (d.getDay()+6)%7;
+  let arr = (schedule[i]||[]).map(x => ({...x}));
+
+  // На четверг и пятницу алгебра проводится через неделю.
+  if (i===3 || i===4) {
+    const base = monday(new Date(2026,9,12));
+    const cur = monday(d);
+    const week = Math.round((cur-base)/604800000);
+    if (week%2 !== 0) arr = arr.filter(x => x.subject !== 'Алгебра');
+  }
+  return arr;
+}
 
 window.addEventListener('hashchange',() => {
   const d = fromHash();
@@ -786,6 +880,7 @@ window.addEventListener('hashchange',() => {
     render();
   }
 });
+
 document.addEventListener('keydown',e => {
   if (e.key==='Escape') {closeCal();closeHomework();}
   const modalOpen = $('overlay').classList.contains('open')||$('hwOverlay').classList.contains('open');
@@ -798,7 +893,18 @@ document.addEventListener('keydown',e => {
   }
 });
 
+/* Сначала отображаем интерфейс, затем загружаем общие задания. */
 render();
+loadSharedHomework(true);
+
+/* Подхватываем изменения, сделанные другими посетителями сайта. */
+setInterval(() => {
+  if (!document.hidden) loadSharedHomework(false);
+},15000);
+
+document.addEventListener('visibilitychange',() => {
+  if (!document.hidden) loadSharedHomework(false);
+});
 </script>
 </body>
 </html>
