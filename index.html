@@ -218,6 +218,49 @@ h1 {margin:0;font-size:30px;font-weight:820;line-height:1.15;letter-spacing:-.05
 @media(prefers-reduced-motion:reduce) {
   *,*:before,*:after {animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+
+/* Принудительно видимые стрелки переключения недель */
+.week {
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+.weeknav {
+  display: flex !important;
+  flex: 0 0 32px !important;
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 42px !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 50% !important;
+  background: var(--card) !important;
+  color: var(--text) !important;
+  font-size: 27px !important;
+  line-height: 1 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+.weeknav:hover {
+  background: var(--soft) !important;
+  color: var(--accent) !important;
+}
+
+@media (max-width: 650px) {
+  .weeknav {
+    flex-basis: 24px !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    height: 34px !important;
+    font-size: 23px !important;
+  }
+}
+
 </style>
 </head>
 
@@ -513,40 +556,71 @@ function closeHomework() {
   }
 }
 
+
 function renderWeek() {
   const d = selected;
   const today = atNoon(new Date());
   const mon = monday(d);
 
-  const previous = new Date(d);
-  previous.setDate(previous.getDate()-7);
+  let html = `
+    <button type="button" class="weeknav" id="prevWeek"
+      aria-label="Предыдущая неделя" title="Предыдущая неделя">‹</button>
+  `;
 
-  const following = new Date(d);
-  following.setDate(following.getDate()+7);
+  for (let n = 0; n < 7; n++) {
+    const x = new Date(mon);
+    x.setDate(mon.getDate() + n);
 
-  $('week').innerHTML =
-    `<button class="weeknav" id="prevWeek" title="Предыдущая неделя" aria-label="Предыдущая неделя">‹</button>` +
-    Array.from({length:7},(_,n) => {
-      const x = new Date(mon);
-      x.setDate(mon.getDate()+n);
-      return `<button class="day ${same(x,d)?'active':''} ${same(x,today)?'today':''}"
-        data-d="${iso(x)}" aria-label="${days[n]}, ${x.getDate()}">
-        <small>${short[n]}</small><span class="num">${x.getDate()}</span></button>`;
-    }).join('') +
-    `<button class="weeknav" id="nextWeek" title="Следующая неделя" aria-label="Следующая неделя">›</button>` +
-    `<button class="calbtn" id="openCal" title="Открыть календарь" aria-label="Открыть календарь">
-      <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 10h18"/>
-      </svg></button>`;
+    html += `
+      <button type="button"
+        class="day ${same(x,d) ? 'active' : ''} ${same(x,today) ? 'today' : ''}"
+        data-d="${iso(x)}"
+        aria-label="${days[n]}, ${x.getDate()}">
+        <small>${short[n]}</small>
+        <span class="num">${x.getDate()}</span>
+      </button>
+    `;
+  }
 
-  $('week').querySelectorAll('[data-d]').forEach(b => {
-    b.onclick = () => go(new Date(b.dataset.d+'T12:00:00'));
+  html += `
+    <button type="button" class="weeknav" id="nextWeek"
+      aria-label="Следующая неделя" title="Следующая неделя">›</button>
+
+    <button type="button" class="calbtn" id="openCal"
+      title="Открыть календарь" aria-label="Открыть календарь">
+      <svg viewBox="0 0 24 24" width="21" height="21"
+        fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="3"/>
+        <path d="M16 3v4M8 3v4M3 10h18"/>
+      </svg>
+    </button>
+  `;
+
+  $('week').innerHTML = html;
+
+  $('week').querySelectorAll('[data-d]').forEach(button => {
+    button.onclick = () => {
+      go(new Date(button.dataset.d + 'T12:00:00'));
+    };
   });
 
-  $('prevWeek').onclick = () => go(previous);
-  $('nextWeek').onclick = () => go(following);
+  $('prevWeek').onclick = () => {
+    const date = new Date(selected);
+    date.setDate(date.getDate() - 7);
+    go(date);
+  };
+
+  $('nextWeek').onclick = () => {
+    const date = new Date(selected);
+    date.setDate(date.getDate() + 7);
+    go(date);
+  };
+
   $('openCal').onclick = openCal;
 }
+
 
 function renderSchedule() {
   const d = selected;
